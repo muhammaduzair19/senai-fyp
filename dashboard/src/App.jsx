@@ -14,6 +14,7 @@ import AddDoctor from "./pages/admin/add-doctor";
 import DoctorsList from "./pages/admin/doctors-list";
 import Sidebar from "./components/sidebar";
 import Navbar from "./components/navbar";
+import PageTitle from "./components/page-title";
 
 const AdminLayout = () => {
     const { atoken } = useAdminContext();
@@ -75,13 +76,44 @@ const App = () => {
             <Routes>
                 <Route element={<AdminLayout />}>
                     <Route path="/" element={<></>} />
-                    <Route path="/admin-dashboard" element={<Dashboard />} />
+                    <Route
+                        path="/admin-dashboard"
+                        element={
+                            <>
+                                <PageTitle
+                                    title={"Admin - Dashboard | Senai"}
+                                />
+                                <Dashboard />
+                            </>
+                        }
+                    />
                     <Route
                         path="/all-appointments"
-                        element={<AllAppointments />}
+                        element={
+                            <>
+                                <PageTitle title={"All Appointments | Senai"} />
+                                <AllAppointments />
+                            </>
+                        }
                     />
-                    <Route path="/add-doctor" element={<AddDoctor />} />
-                    <Route path="/doctors-list" element={<DoctorsList />} />
+                    <Route
+                        path="/add-doctor"
+                        element={
+                            <>
+                                <PageTitle title={"Add new Doctor | Senai"} />
+                                <AddDoctor />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/doctors-list"
+                        element={
+                            <>
+                                <PageTitle title={"Doctors | Senai"} />
+                                <DoctorsList />
+                            </>
+                        }
+                    />
                 </Route>
                 <Route element={<DoctorLayout />}>
                     <Route
@@ -90,23 +122,50 @@ const App = () => {
                     />
                     <Route
                         path="/doctor-dashboard"
-                        element={<DoctorDashboard />}
+                        element={
+                            <>
+                                <PageTitle
+                                    title={"Doctor - Dashboard | Senai"}
+                                />
+                                <DoctorDashboard />
+                            </>
+                        }
                     />
-                    <Route path="/doctor-profile" element={<DoctorProfile />} />
+                    <Route
+                        path="/doctor-profile"
+                        element={
+                            <>
+                                <PageTitle title={"Profile | Senai"} />
+                                <DoctorProfile />
+                            </>
+                        }
+                    />
                     <Route
                         path="/doctor-appointments"
-                        element={<DoctorAppointment />}
+                        element={
+                            <>
+                                <PageTitle title={"Appointment | Senai"} />
+                                <DoctorAppointment />
+                            </>
+                        }
                     />
                 </Route>
             </Routes>
         </div>
     ) : (
         <>
-            <Login />
             <ToastContainer />
             <Routes>
                 <Route path="/*" element={<Navigate to={"/login"} />} />
-                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/login"
+                    element={
+                        <>
+                            <PageTitle   title={"Login | Senai"} />
+                            <Login />
+                        </>
+                    }
+                />
             </Routes>
         </>
     );

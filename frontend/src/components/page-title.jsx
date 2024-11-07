@@ -7,7 +7,11 @@ const PageTitle = ({ title }) => {
 
     useEffect(() => {
         if (speciality) {
-            document.title = speciality.split("")[0].toUpperCase() + speciality.slice(1) + " " + "| Senai";
+            document.title =
+                speciality.split("")[0].toUpperCase() +
+                speciality.slice(1) +
+                " " +
+                "| Senai";
         } else {
             document.title = title;
         }
