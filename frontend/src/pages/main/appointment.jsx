@@ -202,7 +202,7 @@ const Appointment = () => {
                     </CardContent>
                 </Card>
 
-                <Card className="mb-6 dark:bg-zinc-950/80">
+                <Card className="mb-6  dark:bg-zinc-950/80">
                     <CardHeader>
                         <CardTitle className="text-xl font-bold text-green-800 dark:text-green-100">
                             Booking Slots

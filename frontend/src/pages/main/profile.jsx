@@ -62,8 +62,8 @@ const Profile = () => {
     if (!userData) return null;
 
     return (
-        <div className="container mx-auto p-4 bg-green-50 dark:bg-green-900">
-            <Card className="max-w-2xl mx-auto dark:bg-green-800">
+        <div className="container mx-auto p-4">
+            <Card className="max-w-2xl mx-auto dark:bg-zinc-950/80">
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold text-green-800 dark:text-green-100">
                         User Profile
