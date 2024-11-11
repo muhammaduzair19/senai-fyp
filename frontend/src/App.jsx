@@ -19,6 +19,7 @@ import Appointment from "./pages/main/appointment";
 import { ToastContainer } from "react-toastify";
 import MyAppointment from "./pages/main/my-appointments";
 import Profile from "./pages/main/profile";
+import Community from "./pages/main/community";
 
 const App = () => {
     const [colorMode, setColorMode] = useLocalStorage("color-theme", "light");
@@ -137,6 +138,15 @@ const App = () => {
                             <>
                                 <PageTitle title={"My Appointments | Senai"} />
                                 <Profile />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/community"
+                        element={
+                            <>
+                                <PageTitle title={"Community | Senai"} />
+                                <Community />
                             </>
                         }
                     />

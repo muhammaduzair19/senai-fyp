@@ -8,6 +8,7 @@ import {
     NotebookPen,
     ScrollText,
     BookHeart,
+    Handshake,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -23,6 +24,7 @@ const Sidebar = () => {
         { icon: NotebookPen, label: "Daily Journal", path: "/daily-journal" },
         { icon: ScrollText, label: "Coping Skills", path: "/coping-skills" },
         { icon: BookHeart, label: "Therapist", path: "/doctors" },
+        { icon: Handshake, label: "Community", path: "/community" },
     ];
 
     return (
