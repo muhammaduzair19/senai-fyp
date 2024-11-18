@@ -53,71 +53,6 @@ import {
 import { useAppContext } from "@/context/context";
 import { useNavigate } from "react-router-dom";
 
-// Dummy posts with comments
-const dummyPosts = [
-    {
-        _id: "dummy1",
-        title: "Overcoming Anxiety",
-        content:
-            "I've found that regular exercise and meditation have been incredibly helpful in managing my anxiety. What strategies work for you?",
-        coverImage: "https://example.com/anxiety-image.jpg",
-        userId: "dummyUser1",
-        userData: {
-            name: "Jane Doe",
-            image: "https://example.com/jane-doe.jpg",
-        },
-        createdAt: "2023-06-15T10:00:00Z",
-        likes: ["dummyUser2", "dummyUser3"],
-        comments: [
-            {
-                _id: "dummyComment1",
-                user: {
-                    name: "John Smith",
-                    image: "https://example.com/john-smith.jpg",
-                },
-                content:
-                    "Great tips! I've also found that keeping a gratitude journal helps me stay positive.",
-                createdAt: "2023-06-15T11:00:00Z",
-            },
-            {
-                _id: "dummyComment2",
-                user: {
-                    name: "Emily Brown",
-                    image: "https://example.com/emily-brown.jpg",
-                },
-                content:
-                    "Meditation has been a game-changer for me too. Have you tried any specific apps?",
-                createdAt: "2023-06-15T12:00:00Z",
-            },
-        ],
-    },
-    {
-        _id: "dummy2",
-        title: "The Importance of Self-Care",
-        content:
-            "Remember, taking care of yourself is not selfish. It's necessary for your mental health and overall well-being. What are your favorite self-care activities?",
-        userId: "dummyUser2",
-        userData: {
-            name: "Mike Johnson",
-            image: "https://example.com/mike-johnson.jpg",
-        },
-        createdAt: "2023-06-16T09:00:00Z",
-        likes: ["dummyUser1"],
-        comments: [
-            {
-                _id: "dummyComment3",
-                user: {
-                    name: "Sarah Lee",
-                    image: "https://example.com/sarah-lee.jpg",
-                },
-                content:
-                    "I love taking long baths and reading a good book. It's my way of disconnecting from the world.",
-                createdAt: "2023-06-16T10:00:00Z",
-            },
-        ],
-    },
-];
-
 const Community = () => {
     const navigate = useNavigate();
     const {
@@ -287,14 +222,15 @@ const Community = () => {
                         </CardContent>
                     </Card>
                     <ScrollArea className="min-h-[calc(100vh-300px)]">
-                        {[...dummyPosts, ...posts].map((post) => (
+                        {[...posts].reverse().map((post) => (
                             <RenderPost key={post?._id} post={post} />
                         ))}
                     </ScrollArea>
                 </TabsContent>
                 <TabsContent value="your-posts">
                     <ScrollArea className="min-h-[calc(100vh-200px)]">
-                        {[...dummyPosts, ...posts]
+                        {[...posts]
+                            .reverse()
                             .filter((post) => post?.userId === userData._id)
                             .map((post) => (
                                 <RenderPost

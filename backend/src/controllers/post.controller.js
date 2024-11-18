@@ -200,7 +200,7 @@ export const addComment = async (req, res) => {
             userData,
             content,
         });
-        let post = await Post.findById(post._id);
+        let post = await Post.findById(postId);
         post = await getCommentsAndLikes(post);
 
         res.json({ success: true, post, message: "done" });
