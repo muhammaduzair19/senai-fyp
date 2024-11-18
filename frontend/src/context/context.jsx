@@ -21,7 +21,7 @@ const AppContext = ({ children }) => {
             return "";
         }
     });
-    
+
     const months = [
         "Jan",
         "Feb",
@@ -36,7 +36,7 @@ const AppContext = ({ children }) => {
         "Nov",
         "Dec",
     ];
-   
+
     const currencySymbol = "Rs.";
 
     const getDoctorsData = async () => {
@@ -61,7 +61,7 @@ const AppContext = ({ children }) => {
             if (data.success) {
                 setUserData(data.user);
             } else {
-                toast.error(data.message);
+                setUserData({});
             }
         } catch (error) {
             console.log(error.message);
@@ -71,10 +71,11 @@ const AppContext = ({ children }) => {
 
     const fetchPosts = async () => {
         try {
-            const { data } = await axios.get(`${backendUrl}/post/all`, {
+            const { data } = await axios.get(`${backendUrl}/posts/all`, {
                 headers: { token },
             });
             setPosts(data.posts.reverse());
+            console.log(data.posts.reverse());
         } catch (error) {
             toast.error("Failed to fetch posts");
         }

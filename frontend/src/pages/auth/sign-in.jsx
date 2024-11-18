@@ -14,7 +14,7 @@ export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
-    const { token, setToken, backendUrl } = useAppContext();
+    const { token, setToken, backendUrl, getUserData } = useAppContext();
     const validateForm = () => {
         let errors = {};
         if (!email.trim()) {
@@ -47,6 +47,7 @@ export default function SignIn() {
             if (data.success) {
                 localStorage.setItem("userToken", data.token);
                 setToken(data.token);
+                getUserData();
                 toast.success("Register Successfully");
             } else {
                 toast.error(data.message);

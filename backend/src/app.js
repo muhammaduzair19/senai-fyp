@@ -16,6 +16,6 @@ app.use(express.json());
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
-app.use("/api/post", postRouter);
+app.use("/api/posts", postRouter);
 
 export { app };

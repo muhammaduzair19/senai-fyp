@@ -1,14 +1,26 @@
 import { uploadOnCloudinary } from "../config/cloudinary.js";
+import { Comment } from "../models/commentModel.js";
 import { Like } from "../models/likeModel.js";
 import { Post } from "../models/postModel.js";
 import { User } from "../models/userSchema.js";
 
+const getCommentsAndLikes = async (post) => {
+    const comments = await Comment.find({ postId: post._id });
+    const likes = await Like.find({ postId: post._id });
+    return { ...post._doc, comments, likesCount: likes.length, likes };
+};
+
 export const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find({});
+
+        const allPosts = await Promise.all(
+            posts.map(async (post) => await getCommentsAndLikes(post))
+        );
+
         return res.json({
             success: true,
-            posts,
+            posts: allPosts,
             message: "Posts Fetched",
         });
     } catch (error) {
@@ -25,7 +37,7 @@ export const addPost = async (req, res) => {
         if (!title) {
             return res.json({ success: false, message: "Title recording" });
         }
-        const userData = await User.findById(userId).select("-password");
+        const userData = await User.findById(userId).select("name image");
 
         const postData = {
             title,
@@ -62,7 +74,8 @@ export const addPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
     try {
-        const { userId, postId, title, content } = req.body;
+        const { userId, title, content } = req.body;
+        const { postId } = req.params;
 
         if (!postId) {
             return res.json({ success: false, message: "Post Id Requried" });
@@ -76,7 +89,7 @@ export const updatePost = async (req, res) => {
             });
         }
 
-        if (userId !== postData.userId) {
+        if (userId !== postData.userId.toString()) {
             return res.json({
                 success: false,
                 message: "Post Id doesnt match with user",
@@ -84,9 +97,10 @@ export const updatePost = async (req, res) => {
         }
 
         await Post.findByIdAndUpdate(postId, { title, content });
-
+        const post = await Post.findById(postId);
         res.json({
             success: true,
+            post,
             message: "Updated",
         });
     } catch (error) {
@@ -97,7 +111,8 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
     try {
-        const { userId, postId } = req.body;
+        const { userId } = req.body;
+        const { postId } = req.params;
 
         if (!postId) {
             return res.json({ success: false, message: "Post Id Requried" });
@@ -132,7 +147,8 @@ export const deletePost = async (req, res) => {
 
 export const addRemoveLike = async (req, res) => {
     try {
-        const { userId, postId } = req.body;
+        const { userId } = req.body;
+        const { postId } = req.params;
 
         if (!postId) {
             return res.json({ success: false, message: "Post Id Requried" });
@@ -144,24 +160,72 @@ export const addRemoveLike = async (req, res) => {
         });
 
         if (like) {
+            let post = await Post.findById(like.postId);
+            post = await getCommentsAndLikes(post);
 
-            await Post.findByIdAndUpdate(like.postId, {
-                $pull: { likes: like._id },
-            });
             return res.json({
                 success: true,
+                post,
                 message: "Unliked",
             });
         }
         const newLike = await Like.create({ postId, userId });
-
-        // Update the Post document to include this like
-        await Post.findByIdAndUpdate(postId, { $push: { likes: newLike._id } });
-
+        let post = await Post.findById(newLike.postId);
+        post = await getCommentsAndLikes(post);
         res.json({
             success: true,
-            message: "Like added",
+            post,
+            message: "Liked",
         });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+export const addComment = async (req, res) => {
+    try {
+        const { userId, content } = req.body;
+        const { postId } = req.params;
+
+        if (!postId) {
+            return res.json({ success: false, message: "Post Id Requried" });
+        }
+
+        const userData = await User.findById(userId).select("name image");
+
+        await Comment.create({
+            userId,
+            postId,
+            userData,
+            content,
+        });
+        let post = await Post.findById(post._id);
+        post = await getCommentsAndLikes(post);
+
+        res.json({ success: true, post, message: "done" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+export const deleteComment = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const { postId } = req.params;
+
+        if (!postId) {
+            return res.json({ success: false, message: "Post Id Requried" });
+        }
+
+        const comment = await Comment.findOneAndDelete({
+            postId: postId,
+            userId: userId,
+        });
+
+        let post = await Post.findById(comment.postId);
+        post = await getCommentsAndLikes(post);
+        res.json({ success: true, post, message: "Comment Deleted" });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });

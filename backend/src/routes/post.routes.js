@@ -2,8 +2,10 @@ import express from "express";
 import upload from "../middlewares/multer.js";
 import authUser from "../middlewares/authUser.js";
 import {
+    addComment,
     addPost,
     addRemoveLike,
+    deleteComment,
     deletePost,
     getAllPosts,
     updatePost,
@@ -11,10 +13,12 @@ import {
 
 const postRouter = express.Router();
 
-postRouter.post("/add-post", upload.single("coverImage"), authUser, addPost);
-postRouter.post("/edit-post", authUser, updatePost);
 postRouter.get("/all", getAllPosts);
-postRouter.post("/delete", authUser, deletePost);
-postRouter.post("/like", authUser, addRemoveLike);
+postRouter.post("/add-post", upload.single("coverImage"), authUser, addPost);
+postRouter.put("/:postId", authUser, updatePost);
+postRouter.delete("/:postId", authUser, deletePost);
+postRouter.post("/:postId/like", authUser, addRemoveLike);
+postRouter.post("/:postId/comment", authUser, addComment);
+postRouter.delete("/:postId/comment", authUser, deleteComment);
 
 export default postRouter;

@@ -13,11 +13,12 @@ import {
 import { useState } from "react";
 
 const Navbar = () => {
-    const { sidebarOpen, setSidebarOpen, userData, token } = useAppContext();
-    const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const { sidebarOpen, setSidebarOpen, userData, token, setToken } =
+        useAppContext();
     const navigate = useNavigate();
     const logout = () => {
         localStorage.removeItem("userToken");
+        setToken("");
     };
     return (
         <header className="bg-white shadow-sm dark:bg-zinc-900 dark:text-white dark:border-b  dark:border-zinc-600">
@@ -54,7 +55,7 @@ const Navbar = () => {
                                             alt={userData.name}
                                         />
                                         <AvatarFallback className="uppercase bg-green-700 font-bold text-white">
-                                            {userData.name.charAt(0)}
+                                            {userData.name?.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>
